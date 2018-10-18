@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node server/bin/www.js",
+    "start": "nodemon server/bin/www.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ramvignesh Pasupathy",
@@ -17,8 +17,10 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-flexbox-grid": "^1.1.5",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.2.2",
-    "react-tap-event-plugin": "^2.0.1"
+    "react-tap-event-plugin": "^2.0.1",
+    "semantic-ui-react": "^0.82.5"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

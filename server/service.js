@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-
+var table = require('./routes/table')
 let createApp = function() {
   const app = express();
   return app;
@@ -12,11 +12,7 @@ let setupStaticRoutes = function(app) {
 };
 
 let setupAppRoutes = function(app) {
-  app.get('/route',(req,res)=>{
-    res.status(200).json({
-      message : "success"
-    })
-  })
+  app.use('/table',table)
   return app;
 };
 

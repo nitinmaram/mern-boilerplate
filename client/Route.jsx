@@ -1,20 +1,17 @@
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
+// import {Router, Route, hashHistory} from 'react-router';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import App from './components/App.jsx';
-import './styles/index.css';
 
+import Table from './components/tableApp.jsx';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-render(
-  <MuiThemeProvider>
-  <Router>
-      <div>
-          <Route exact path= '/' component={App}/>
-      </div>
-  </Router>
-  </MuiThemeProvider>,
-  document.getElementById('root')
+
+ReactDOM.render(
+		<Router>
+		<Route path="/" component={Table} />
+		</Router>,
+  	document.getElementById('root')
 );
