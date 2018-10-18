@@ -12,6 +12,11 @@ let setupStaticRoutes = function(app) {
 };
 
 let setupAppRoutes = function(app) {
+  app.get('/route',(req,res)=>{
+    res.status(200).json({
+      message : "success"
+    })
+  })
   return app;
 };
 
