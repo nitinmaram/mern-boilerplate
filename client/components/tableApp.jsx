@@ -16,6 +16,7 @@ class TableApp extends Component {
     try  {
       const response = await fetch(`/table`)
       const json = await response.json()
+      console.log(json.data);
       this.setState({ data: json.data, fixData: json.data });
   }
     catch(err) {
@@ -99,7 +100,7 @@ class TableApp extends Component {
       data: this.state.data
     })
   }
-  handleSubmit(){
+  handleFilter(){
 
     var sd = new Date(document.getElementById('sd').value)
     var ed = new Date(document.getElementById('ed').value)
@@ -158,11 +159,65 @@ class TableApp extends Component {
       startDate: date
     });
   }
+  addClick(i){
+this.state.data.push({name: '',amount: 0,date: new Date().toDateString()})
+this.setState({
+  data: this.state.data
+})
+  }
+  editClick(i){
+    this.setState({
+      ['name'+i]: !this.state['name'+i],
+      ['amount'+i]: !this.state['amount'+i],
+      ['date'+i]: !this.state['date'+i]
+    })
+  }
+  deleteClick(i){
+    console.log(i);
+    this.state.data.splice(i, 1);
+    this.setState({
+      data: this.state.data
+    })
+    if(this.state.data.length == 0){
+      this.addClick()
+    }
+  }
+  nameChange(i,e){
+    this.state.data[i].name = e.target.value
+    this.setState({
+      'data': this.state.data
+    })
+  }
+  amountChange(i,e){
+    this.state.data[i].amount = e.target.value
+    this.setState({
+      'data': this.state.data
+    })
+  }
+  dateChange(i,e){
+    this.state.data[i].date = e.target.value
+    this.setState({
+      'data': this.state.data
+    })
+  }
+  async submitClick(){
+    let options = {
+      method: "POST",
+      headers: {
+           "Content-Type": "application/json; charset=utf-8"
+       },
+       body: JSON.stringify({data: this.state.data})
+    }
+    console.log(options);
+    const response = await fetch(`/table/add`,options)
+    const text = await response.text()
+    console.log(text);
+  }
 render(){
-
   return (
     <div>
     <h1 style = {{marginLeft: '5%'}}>Transactions</h1>
+
       <Table>
       <Table.Header>
       <Table.Row>
@@ -172,12 +227,19 @@ render(){
       </Table.Row>
     </Table.Header>
     <Table.Body>
-    {this.state.data.map((row) => {
+    {this.state.data.map((row, i) => {
       return (
       <Table.Row>
-        <Table.Cell>{row.name}</Table.Cell>
-        <Table.Cell>{row.amount}</Table.Cell>
-        <Table.Cell>{new Date(row.date).toDateString()}
+        <Table.Cell>{this.state['name'+i] ? <input type = 'text' id= {'name'+i} value = {row.name}
+        onChange = {this.nameChange.bind(this,i)}/>:  row.name}</Table.Cell>
+        <Table.Cell>{this.state['amount'+i] ? <input type = 'number' id= {'amount'+i} value = {row.amount}
+        onChange = {this.amountChange.bind(this,i)}/>: row.amount}</Table.Cell>
+        <Table.Cell>
+        {this.state['date'+i] ? <input type = 'text' id= {'date'+i} value = {new Date(row.date).toDateString()}
+        onChange = {this.dateChange.bind(this,i)}/>: new Date(row.date).toDateString()}
+        &nbsp;&nbsp;&nbsp;<button onClick = {this.editClick.bind(this,i)}>edit</button>
+          &nbsp;&nbsp;&nbsp;<button onClick = {this.deleteClick.bind(this,i)}>delete</button>
+        &nbsp;&nbsp;&nbsp;{this.state.data.length-1 == i ? <button onClick = {this.addClick.bind(this,i)}>add</button>:null}
         </Table.Cell>
       </Table.Row>
     )}
@@ -185,11 +247,14 @@ render(){
     </Table.Body>
       </Table>
     <div style = {{marginLeft: '5%', marginTop: '2%'}}>
-    <input type = 'text' id = 'sd' placeholder = "mm-dd-yyyy" /><br/>
-    <input type = 'text' id = 'ed' placeholder = "mm-dd-yyyy" /><br/>
-    <button onClick = {this.handleSubmit.bind(this)}>submit</button><br/>
+    <button onClick = {this.submitClick.bind(this)}>Submit</button> <br/><br/>
+    Search: <input type = 'text' id = 'search' placeholder = "  anything" onChange = {this.handleSearch.bind(this)}/><br/><br/>
+    Filter:<br/>
+    start date: <input type = 'text' id = 'sd' placeholder = "  mm-dd-yyyy" />&nbsp;&nbsp;
+    end date: <input type = 'text' id = 'ed' placeholder = "  mm-dd-yyyy" /> &nbsp;&nbsp;
+    <button onClick = {this.handleFilter.bind(this)}>Filter</button> <br/><br/>
+    <br/><br/>
     <hr/>
-    <input type = 'text' id = 'search' placeholder = "search" onChange = {this.handleSearch.bind(this)}/><br/>
     </div>
     </div>
   );
