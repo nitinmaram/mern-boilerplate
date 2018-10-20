@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import {Router, Route, hashHistory} from 'react-router';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Router, Route, hashHistory} from 'react-router';
+// import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Table from './components/tableApp.jsx';
 
@@ -10,7 +10,7 @@ injectTapEventPlugin();
 
 
 ReactDOM.render(
-		<Router>
+		<Router history = {hashHistory}>
 		<Route path="/" component={Table} />
 		</Router>,
   	document.getElementById('root')
